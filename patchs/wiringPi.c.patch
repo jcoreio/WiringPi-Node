@@ -1,0 +1,11 @@
+--- wiringPi.c	2018-02-26 02:51:17.402526075 +0000
++++ wiringPi-mod.c	2018-02-26 02:53:23.852062313 +0000
+@@ -678,7 +678,7 @@
+
+ // See if it's BCM2708 or BCM2709
+
+-  if (strstr (line, "BCM2709") != NULL)
++  if (strstr(line, "BCM2835") != NULL || strstr (line, "BCM2709") != NULL)
+     piModel2 = TRUE ;
+   else if (strstr (line, "BCM2708") == NULL)
+   {
