@@ -48,6 +48,7 @@
         'src/devlib/tcs34725.cc'
       ],
       'include_dirs': [
+        "<!(node -e \"require('nan')\")",
         'wiringpi/wiringPi',
         'wiringpi/devLib'
       ],

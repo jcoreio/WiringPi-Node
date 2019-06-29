@@ -1,6 +1,8 @@
 #ifndef _ADDON_H_
 #define _ADDON_H_
-  
+
+  #include <nan.h>
+
   #include <v8.h>
   #include <node_version.h>
     
@@ -40,32 +42,60 @@
     #define EXPORT_FUNCTION(name) \
       target->Set(v8::String::NewFromUtf8(isolate, #name, v8::String::kInternalizedString), \
         v8::FunctionTemplate::New(isolate, nodemodule::name)->GetFunction())
-        
+
+//    #define EXPORT_CONSTANT_INT(name) \
+//      target->ForceSet(v8::String::NewFromUtf8(isolate, #name, v8::String::kInternalizedString), \
+//        v8::Int32::New(isolate, name), static_cast<v8::PropertyAttribute>(v8::ReadOnly | v8::DontDelete));
+
     #define EXPORT_CONSTANT_INT(name) \
-      target->ForceSet(v8::String::NewFromUtf8(isolate, #name, v8::String::kInternalizedString), \
-        v8::Int32::New(isolate, name), static_cast<v8::PropertyAttribute>(v8::ReadOnly | v8::DontDelete));
-    
+          Nan::DefineOwnProperty(target, v8::String::NewFromUtf8(isolate, #name, v8::String::kInternalizedString), \
+            v8::Int32::New(isolate, name), static_cast<v8::PropertyAttribute>(v8::ReadOnly | v8::DontDelete));
+
+//    #define EXPORT_CONSTANT_STRING(name) \
+//      target->ForceSet(v8::String::NewFrontUtf8(isolate, #name, v8::String::kInternalizedString), \
+//        v8::String::NewFromUtf8(isolate, name), static_cast<v8::PropertyAttribute>(v8::ReadOnly | v8::DontDelete));
+
     #define EXPORT_CONSTANT_STRING(name) \
-      target->ForceSet(v8::String::NewFrontUtf8(isolate, #name, v8::String::kInternalizedString), \
-        v8::String::NewFromUtf8(isolate, name), static_cast<v8::PropertyAttribute>(v8::ReadOnly | v8::DontDelete));
-    
+          Nan::DefineOwnProperty(target, v8::String::NewFrontUtf8(isolate, #name, v8::String::kInternalizedString), \
+            v8::String::NewFromUtf8(isolate, name), static_cast<v8::PropertyAttribute>(v8::ReadOnly | v8::DontDelete));
+
+//    #define EXPORT_CONSTANT_INT_ARRAY(name, array, length) \
+//      { \
+//        v8::Local<v8::Array> arr = v8::Array::New(isolate, length); \
+//        for (int i = 0; i < length; i++) { \
+//          arr->Set(i, v8::Int32::New(isolate, array[i])); \
+//        } \
+//        target->ForceSet(v8::String::NewFromUtf8(isolate, #name, v8::String::kInternalizedString), \
+//          arr, static_cast<v8::PropertyAttribute>(v8::ReadOnly | v8::DontDelete)); \
+//      }
+
     #define EXPORT_CONSTANT_INT_ARRAY(name, array, length) \
-      { \
-        v8::Local<v8::Array> arr = v8::Array::New(isolate, length); \
-        for (int i = 0; i < length; i++) { \
-          arr->Set(i, v8::Int32::New(isolate, array[i])); \
-        } \
-        target->ForceSet(v8::String::NewFromUtf8(isolate, #name, v8::String::kInternalizedString), \
-          arr, static_cast<v8::PropertyAttribute>(v8::ReadOnly | v8::DontDelete)); \
-      }
-      
+          { \
+            v8::Local<v8::Array> arr = v8::Array::New(isolate, length); \
+            for (int i = 0; i < length; i++) { \
+              arr->Set(i, v8::Int32::New(isolate, array[i])); \
+            } \
+            NaN::DefineOwnProperty(target, v8::String::NewFromUtf8(isolate, #name, v8::String::kInternalizedString), \
+              arr, static_cast<v8::PropertyAttribute>(v8::ReadOnly | v8::DontDelete)); \
+          }
+
+//    #define EXPORT_CONSTANT_STRING_ARRAY(name, array, length) \
+//      { \
+//        v8::Local<v8::Array> arr = v8::Array::New(isolate, length); \
+//        for (int i = 0; i < length; i++) { \
+//          arr->Set(i, v8::String::NewFromUtf8(isolate, array[i])); \
+//        } \
+//        target->ForceSet(v8::String::NewFromUtf8(isolate, #name, v8::String::kInternalizedString), \
+//          arr, static_cast<v8::PropertyAttribute>(v8::ReadOnly | v8::DontDelete)); \
+//      }
+
     #define EXPORT_CONSTANT_STRING_ARRAY(name, array, length) \
       { \
         v8::Local<v8::Array> arr = v8::Array::New(isolate, length); \
         for (int i = 0; i < length; i++) { \
           arr->Set(i, v8::String::NewFromUtf8(isolate, array[i])); \
         } \
-        target->ForceSet(v8::String::NewFromUtf8(isolate, #name, v8::String::kInternalizedString), \
+        Nan::DefineOwnProperty(target, v8::String::NewFromUtf8(isolate, #name, v8::String::kInternalizedString), \
           arr, static_cast<v8::PropertyAttribute>(v8::ReadOnly | v8::DontDelete)); \
       }
   
